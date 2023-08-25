@@ -167,6 +167,26 @@ namespace Auth.Controllers
             ViewBag.TopicTitle = topic.TopicTitle;
             return View(messages);
         }
+        public IActionResult MessagesByTopic(int forumTopicId)
+        {
+            var topic = _context.ForumTopic.FirstOrDefault(t => t.Id == forumTopicId);
+
+            if (topic == null)
+            {
+                return NotFound();
+            }
+
+            ViewBag.TopicTitle = topic.TopicTitle;
+
+            var messages = _context.ForumMessages
+                .Where(m => m.ForumTopicId == forumTopicId)
+                .OrderByDescending(m => m.CreatedAt)
+                .ToList();
+
+            return View(messages);
+        }
+
+
     }
 }
 

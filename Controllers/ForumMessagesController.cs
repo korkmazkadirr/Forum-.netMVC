@@ -50,7 +50,7 @@ namespace Auth.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
 
-        public ActionResult Create([Bind("Id,ForumTopicId,TopicTitle,MessageTitle,Message,CreatedAt")]ForumMessages model)
+        public ActionResult Create([Bind("Id,ForumTopicId,TopicTitle,MessageTitle,Message,CreatedAt")] ForumMessages model)
         {
             if (ModelState.IsValid)
             {
@@ -64,7 +64,7 @@ namespace Auth.Controllers
         }
 
         // GET: ForumMessageEntities/Edit/5
-    
+
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.ForumMessages == null)
@@ -152,7 +152,25 @@ namespace Auth.Controllers
             //return (_context.ForumMessages?.Any(e => e.Id == id)).GetValueOrDefault();
             return _context.ForumMessages.Any(e => e.Id == id);
         }
+        public IActionResult MessagesByTopic(int forumTopicId)
+        {
+            var topic = _context.ForumTopic.FirstOrDefault(t => t.Id == forumTopicId);
+
+            if (topic == null)
+            {
+                return NotFound();
+            }
+
+            ViewBag.TopicTitle = topic.TopicTitle;
+
+            var messages = _context.ForumMessages
+                .Where(m => m.ForumTopicId == forumTopicId)
+                .OrderByDescending(m => m.CreatedAt)
+                .ToList();
+
+            return View(messages);
+        }
+
 
     }
 }
-

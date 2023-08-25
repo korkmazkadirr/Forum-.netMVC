@@ -1,0 +1,30 @@
+﻿@model List<Auth.Models.ForumMessages>
+
+@{
+    ViewData["Title"] = "Messages by Topic";
+}
+
+<h1>@ViewBag.TopicTitle Konusu Mesajları</h1>
+
+@if (Model != null && Model.Count > 0)
+{
+    foreach (var message in Model)
+    {
+        <div class="message">
+            <h3>@message.MessageTitle</h3>
+            <p>@message.Message</p>
+@*             <p>Created At: @message.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss")</p>
+ *@         <p>Created At: @message.CreatedAt</p>
+
+        </div>
+        <hr />
+    }
+}
+else
+{
+    <p>No messages available for this topic.</p>
+}
+
+<div>
+    <a asp-action="Messages">Back to List</a>
+</div>
