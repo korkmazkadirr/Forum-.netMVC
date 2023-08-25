@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Auth.Data;
 using Auth.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Auth.Controllers
 {
+    [Authorize(Roles = "rol2")]
     public class LeadEntitiesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -22,9 +19,9 @@ namespace Auth.Controllers
         // GET: LeadEntities
         public async Task<IActionResult> Index()
         {
-              return _context.Lead != null ? 
-                          View(await _context.Lead.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.Lead'  is null.");
+            return _context.Lead != null ?
+                        View(await _context.Lead.ToListAsync()) :
+                        Problem("Entity set 'ApplicationDbContext.Lead'  is null.");
         }
 
         // GET: LeadEntities/Details/5
@@ -52,8 +49,7 @@ namespace Auth.Controllers
         }
 
         // POST: LeadEntities/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,Phone,Email,Adress,Gender,Birthdate,City")] LeadEntity leadEntity)
@@ -84,8 +80,6 @@ namespace Auth.Controllers
         }
 
         // POST: LeadEntities/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,Phone,Email,Adress,Gender,Birthdate,City")] LeadEntity leadEntity)
@@ -150,14 +144,14 @@ namespace Auth.Controllers
             {
                 _context.Lead.Remove(leadEntity);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool LeadEntityExists(int id)
         {
-          return (_context.Lead?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Lead?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

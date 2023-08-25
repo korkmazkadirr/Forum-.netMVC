@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -20,18 +24,34 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="LeadEntities" asp-action="Index">Lead</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">AnaSayfa</a>
+                            @if (User.IsInRole("rol1"))
+                            {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="LeadEntities" asp-action="Index">Herhangi Sayfa</a>
+                            </li>
+                            }
+                            else { }
+                            @if (User.IsInRole("rol1"))
+
+                            {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="AppRoles" asp-action="Index">Roller</a>
+                            </li>
+                            }
+                            else { }
+                        <li class="nav-item text-dark dropdown">
+                            <a class="nav-link text-dark dropdown-toggle" id="navbarDropdownPortfolio" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Forum</a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownPortfolio">
+                                <li><a class="dropdown-item" asp-controller="ForumTopic" asp-action="Index">Konular</a></li>
+
+                                <li><a class="dropdown-item" asp-controller="ForumMessages" asp-action="Messages">Messages</a></li>
+                            </ul>
                         </li>
                     </ul>
                 </div>
             </div>
-            <partial name="_LoginPartial"/>
+            <partial name="_LoginPartial" />
         </nav>
     </header>
     <div class="container">

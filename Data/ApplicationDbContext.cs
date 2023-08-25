@@ -12,6 +12,11 @@ namespace Auth.Data
 
         public DbSet<LeadEntity> Lead { get; set; }
 
+        public DbSet<ForumMessages> ForumMessages { get; set; }
+
+        public DbSet<ForumTopic> ForumTopic { get; set; }
+
+        public DbSet<ApplicationUser> AplicationUser { get; set; }
 
     }
 }
