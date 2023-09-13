@@ -21,6 +21,7 @@ namespace Auth.Controllers
         // GET: ForumTopicEntities
         public async Task<IActionResult> Index()
         {
+
             return _context.ForumTopic != null ?
                         View(await _context.ForumTopic.ToListAsync()) :
                         Problem("Entity set 'ApplicationDbContext.ForumTopic'  is null.");
@@ -167,24 +168,26 @@ namespace Auth.Controllers
             ViewBag.TopicTitle = topic.TopicTitle;
             return View(messages);
         }
-        public IActionResult MessagesByTopic(int forumTopicId)
-        {
-            var topic = _context.ForumTopic.FirstOrDefault(t => t.Id == forumTopicId);
+        //public IActionResult MessagesByTopic(int forumTopicId)
+        //{
+        //    var topic = _context.ForumTopic.FirstOrDefault(t => t.Id == forumTopicId);
 
-            if (topic == null)
-            {
-                return NotFound();
-            }
+        //    if (topic == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            ViewBag.TopicTitle = topic.TopicTitle;
+        //    ViewBag.TopicTitle = topic.TopicTitle;
 
-            var messages = _context.ForumMessages
-                .Where(m => m.ForumTopicId == forumTopicId)
-                .OrderByDescending(m => m.CreatedAt)
-                .ToList();
+        //    var messages = _context.ForumMessages
+        //        .Where(m => m.ForumTopicId == forumTopicId)
+        //        .OrderByDescending(m => m.CreatedAt)
+        //        .ToList();
 
-            return View(messages);
-        }
+        //    return View(messages);
+        //}
+
+
 
 
     }

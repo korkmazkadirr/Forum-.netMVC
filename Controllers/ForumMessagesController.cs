@@ -2,6 +2,7 @@
 using Auth.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore;
 
 namespace Auth.Controllers
@@ -10,14 +11,14 @@ namespace Auth.Controllers
     {
         private ApplicationDbContext _context;
 
+       
         public ForumMessagesController(ApplicationDbContext context)
         {
             _context = context;
         }
         public async Task<IActionResult> Messages()
         {
-            //var applicationDbContext = _context.ForumMessages.Include(u => u.TopicTitle);
-            //return View(await applicationDbContext.ToListAsync());
+
 
             return _context.ForumMessages != null ?
                      View(await _context.ForumMessages.ToListAsync()) :
@@ -54,13 +55,15 @@ namespace Auth.Controllers
         {
             if (ModelState.IsValid)
             {
-                model.CreatedAt = DateTime.Now;
-                _context.ForumMessages.Add(model);
-                _context.SaveChanges();
-                return RedirectToAction("Messages");
+
+                ViewData["ForumTopicId"] = new SelectList(_context.ForumTopic, "Id", "TopicTitle", model.ForumTopicId);
+                return View(model);
             }
-            ViewData["ForumTopicId"] = new SelectList(_context.ForumTopic, "Id", "TopicTitle", model.ForumTopicId);
-            return View(model);
+            model.CreatedAt = DateTime.Now;
+            _context.ForumMessages.Add(model);
+            _context.SaveChanges();
+            return RedirectToAction("Messages");
+
         }
 
         // GET: ForumMessageEntities/Edit/5
@@ -161,7 +164,8 @@ namespace Auth.Controllers
             }
 
             ViewBag.TopicTitle = topic.TopicTitle;
-
+            TempData["TopicTitle"] = topic.TopicTitle;
+            TempData["id"] = topic.Id;
             var messages = _context.ForumMessages
                 .Where(m => m.ForumTopicId == forumTopicId)
                 .OrderByDescending(m => m.CreatedAt)
@@ -170,6 +174,35 @@ namespace Auth.Controllers
             return View(messages);
         }
 
+        public IActionResult CreateMessagesByTopic(int forumTopicId)
+        {
 
+            var topic = _context.ForumTopic.FirstOrDefault(t => t.Id == forumTopicId);
+            ViewData["ForumTopicId"] = new SelectList(_context.ForumTopic, "Id", "TopicTitle");
+            return View();
+
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+
+        public ActionResult CreateMessagesByTopic([Bind("Id,ForumTopicId,TopicTitle,MessageTitle,Message,CreatedAt")] ForumMessages model)
+        {
+            if (ModelState.IsValid)
+            {
+                //model.CreatedAt = DateTime.Now;
+                //_context.ForumMessages.Add(model);
+                //_context.SaveChanges();
+                //return RedirectToAction("MessagesByTopic");
+                ViewData["ForumTopicId"] = new SelectList(_context.ForumTopic, "Id", "TopicTitle", model.ForumTopicId);
+                return View(model);
+            }
+            var TempDateTitle = TempData["TopicTitle"];
+            var TemDateId = TempData["id"];
+            model.CreatedAt = DateTime.Now;
+            _context.ForumMessages.Add(model);
+            _context.SaveChanges();
+            return RedirectToAction("Messages");
+        }
     }
 }
+

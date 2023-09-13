@@ -1,7 +1,11 @@
-﻿@model List<Auth.Models.ForumMessages>
+﻿@using Microsoft.AspNetCore.Identity
+
+@model List<Auth.Models.ForumMessages>
+
 
 @{
-    ViewData["Title"] = "Messages by Topic";
+    ViewData["Title"] = "MessagesByTopic";
+
 }
 
 <h1>@ViewBag.TopicTitle Konusu Mesajları</h1>
@@ -13,12 +17,12 @@
         <div class="message">
             <h3>@message.MessageTitle</h3>
             <p>@message.Message</p>
-@*             <p>Created At: @message.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss")</p>
- *@         <p>Created At: @message.CreatedAt</p>
-
+            @* <p>Created At: @message.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss")</p>*@
+            <p>Created At: @message.CreatedAt</p>
         </div>
         <hr />
     }
+
 }
 else
 {
@@ -27,4 +31,8 @@ else
 
 <div>
     <a asp-action="Messages">Back to List</a>
+
+</div>
+<div>
+    <a asp-route-Title="@ViewBag.TopicTitle" asp-action="CreateMessagesByTopic">Yeni Mesaj Oluşturma</a>
 </div>

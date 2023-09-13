@@ -1,18 +1,19 @@
-﻿@* ﻿@using Microsoft.AspNetCore.Identity
- *@
+﻿@using Microsoft.AspNetCore.Identity
+
 @model Auth.Models.ForumMessages
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "CreateMessagesByTopic";
+
 }
 
-<h1>Create</h1>
+<h1>Create Messages On @TempData["TopicTitle"]</h1>
 
 <h4>ForumMessage</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="CreateMessagesByTopic">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="MessageTitle" class="control-label" aria-required="true"></label>
@@ -26,11 +27,13 @@
             </div>
             <div class="form-group">
                 <label asp-for="ForumTopicId" class="control-label" aria-required="true"></label>
-                <select asp-for="ForumTopicId" class="form-control" asp-items="ViewBag.ForumTopicId"></select>
+                <select asp-for="ForumTopicId" class="form-control" >
+                    <option value="@TempData["id"]">@TempData["TopicTitle"]</option>
+                </select>
                 <span asp-validation-for="ForumTopicId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="create" class="btn btn-primary" />
+                <input type="submit" value="create" class="btn btn-primary"/>
             </div>
 
         </form>
@@ -38,7 +41,7 @@
 </div>
 
 <div>
-    <a asp-action="Messages">Back to List</a>
+    <a asp-action="MessagesByTopic" asp-route-forumTopicId="@TempData["id"]">Mesajlara Geri Dön</a>
 </div>
 
 @section Scripts {
@@ -46,3 +49,4 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
+
