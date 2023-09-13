@@ -149,7 +149,6 @@ namespace Auth.Controllers
         }
         private bool ForumMessagesExists(int id)
         {
-            //return (_context.ForumMessages?.Any(e => e.Id == id)).GetValueOrDefault();
             return _context.ForumMessages.Any(e => e.Id == id);
         }
         public IActionResult MessagesByTopic(int forumTopicId)
