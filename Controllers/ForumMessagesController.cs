@@ -9,7 +9,7 @@ namespace Auth.Controllers
 {
     public class ForumMessagesController : Controller
     {
-        private ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
 
        
         public ForumMessagesController(ApplicationDbContext context)
@@ -189,19 +189,13 @@ namespace Auth.Controllers
         {
             if (ModelState.IsValid)
             {
-                //model.CreatedAt = DateTime.Now;
-                //_context.ForumMessages.Add(model);
-                //_context.SaveChanges();
-                //return RedirectToAction("MessagesByTopic");
                 ViewData["ForumTopicId"] = new SelectList(_context.ForumTopic, "Id", "TopicTitle", model.ForumTopicId);
                 return View(model);
             }
-            var TempDateTitle = TempData["TopicTitle"];
-            var TemDateId = TempData["id"];
             model.CreatedAt = DateTime.Now;
             _context.ForumMessages.Add(model);
             _context.SaveChanges();
-            return RedirectToAction("Messages");
+            return RedirectToAction("MessagesByTopic", new { forumTopicId = model.ForumTopicId });
         }
     }
 }
